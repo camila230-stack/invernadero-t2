@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green:       #1D9E75;
+    --green-light: #E1F5EE;
+    --green-mid:   #5DCAA5;
+    --green-dark:  #0F6E56;
+    --red:         #E24B4A;
+    --red-light:   #FCEBEB;
+    --blue:        #378ADD;
+    --blue-light:  #E6F1FB;
+    --amber:       #EF9F27;
+    --amber-light: #FAEEDA;
+    --purple:      #7F77DD;
+    --pink:        #D4537E;
+    --gray-100:    #F1EFE8;
+    --gray-400:    #888780;
+    --gray-600:    #5F5E5A;
+    --bg:          #0D0D0D;
+    --bg-card:     #141414;
+    --bg-card2:    #1A1A1A;
+    --border:      rgba(255,255,255,0.08);
+    --border-md:   rgba(255,255,255,0.13);
+    --text-1:      #F0EEE8;
+    --text-2:      #9A9890;
+    --text-3:      #5A5856;
+    --radius-md:   8px;
+    --radius-lg:   12px;
+  }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    color: var(--text-1);
+    min-height: 100vh;
+    padding: 0;
+    font-size: 13px;
+  }
+
+  /* ── Header ── */
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px;
+    border-bottom: 0.5px solid var(--border-md);
+    background: var(--bg-card);
+    position: sticky; top: 0; z-index: 10;
+  }
+
+  .logo { display: flex; align-items: center; gap: 10px; }
+
+  .logo-icon {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: var(--green);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; color: #fff;
+  }
+
+  .logo-name {
+    font-family: 'Fraunces', serif;
+    font-size: 15px; font-weight: 600;
+    color: var(--text-1); letter-spacing: -0.3px;
+  }
+
+  .header-right { display: flex; align-items: center; gap: 12px; }
+
+  .pill {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 10px; padding: 4px 10px;
+    border-radius: 20px;
+    border: 0.5px solid var(--green-mid);
+    color: var(--green-mid);
+    background: rgba(29,158,117,0.1);
+  }
+
+  .dot-pulse {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+  .header-caption { font-size: 10px; color: var(--text-3); }
+
+  /* ── Layout ── */
+  .body { padding: 18px 24px; display: flex; flex-direction: column; gap: 14px; }
+
+  /* ── Metric cards ── */
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+
+  .metric {
+    background: var(--bg-card); border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg); padding: 14px 16px;
+    cursor: pointer; transition: border-color .2s, transform .15s;
+    animation: fadeUp .4s ease both;
+  }
+
+  .metric:hover { border-color: var(--border-md); transform: translateY(-1px); }
+  .metric.active { border-color: var(--green); }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  .metric:nth-child(1){animation-delay:.05s}
+  .metric:nth-child(2){animation-delay:.10s}
+  .metric:nth-child(3){animation-delay:.15s}
+  .metric:nth-child(4){animation-delay:.20s}
+
+  .metric-label {
+    font-size: 10px; color: var(--text-3);
+    text-transform: uppercase; letter-spacing: .8px;
+    display: flex; align-items: center; gap: 5px;
+    margin-bottom: 8px;
+  }
+
+  .metric-alert-dot { width:5px;height:5px;border-radius:50%;background:var(--red);margin-left:auto;animation:pulse 1.5s infinite; }
+
+  .metric-val { font-size: 26px; font-weight: 500; color: var(--text-1); line-height:1; }
+  .metric-unit { font-size: 10px; color: var(--text-3); margin-top: 3px; }
+
+  .metric-bar {
+    height: 3px; border-radius: 2px;
+    background: rgba(255,255,255,0.07);
+    margin-top: 10px; overflow: hidden;
+  }
+
+  .metric-fill { height: 100%; border-radius: 2px; transition: width 1.2s ease; }
+
+  /* ── Two-col row ── */
+  .row2 { display: grid; grid-template-columns: 1fr 280px; gap: 10px; }
+  .row2b { display: grid; grid-template-columns: 1fr 220px; gap: 10px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* ── Card ── */
+  .card {
+    background: var(--bg-card); border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg); padding: 16px;
+    animation: fadeUp .5s ease both;
+  }
+
+  .card-title {
+    font-size: 10px; color: var(--text-3);
+    text-transform: uppercase; letter-spacing: .8px;
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  /* ── Signal tabs ── */
+  .tabs { display: flex; gap: 0; margin-left: auto; }
+
+  .tab {
+    font-size: 10px; padding: 4px 10px;
+    color: var(--text-3); cursor: pointer;
+    border-bottom: 1.5px solid transparent;
+    font-family: 'DM Mono', monospace;
+    transition: color .15s;
+  }
+
+  .tab:hover { color: var(--text-2); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  /* ── Chart ── */
+  .chart-wrap { position: relative; width: 100%; height: 155px; }
+
+  /* ── Agents ── */
+  .agents { display: flex; flex-direction: column; gap: 7px; }
+
+  .agent {
+    display: flex; align-items: center; gap: 9px;
+    padding: 7px 10px; border-radius: var(--radius-md);
+    border: 0.5px solid var(--border);
+    transition: background .15s; cursor: default;
+  }
+
+  .agent:hover { background: var(--bg-card2); }
+  .agent-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .agent-name { color: var(--text-1); font-weight: 500; flex: 1; font-size: 11px; }
+  .agent-status { font-size: 10px; color: var(--text-3); }
+
+  .badge {
+    font-size: 9px; padding: 2px 7px;
+    border-radius: 10px; font-weight: 500;
+  }
+
+  /* ── Alerts ── */
+  .alerts { display: flex; flex-direction: column; gap: 6px; }
+
+  .alert {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 9px 12px; border-radius: var(--radius-md);
+    border-left: 2px solid; font-size: 12px;
+    animation: fadeUp .3s ease both;
+  }
+
+  .alert-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .alert-text { color: var(--text-1); line-height: 1.45; }
+  .alert-time { font-size: 10px; color: var(--text-3); margin-top: 2px; }
+
+  /* ── Risk ring ── */
+  .risk-wrap {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 12px;
+  }
+
+  /* ── Exec button ── */
+  .exec-btn {
+    width: 100%; padding: 10px 14px;
+    background: var(--green); color: #fff;
+    border: none; border-radius: var(--radius-md);
+    font-family: 'DM Mono', monospace; font-size: 12px;
+    cursor: pointer; transition: background .15s, transform .1s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+
+  .exec-btn:hover { background: var(--green-dark); }
+  .exec-btn:active { transform: scale(.98); }
+
+  /* ── Log ── */
+  .log { display: flex; flex-direction: column; gap: 3px; max-height: 130px; overflow-y: auto; }
+
+  .log::-webkit-scrollbar { width: 3px; }
+  .log::-webkit-scrollbar-thumb { background: var(--border-md); border-radius: 2px; }
+
+  .log-line {
+    display: flex; gap: 8px; align-items: baseline;
+    padding: 3px 0; border-bottom: 0.5px solid var(--border);
+    font-size: 10px;
+  }
+
+  .log-time { color: var(--text-3); flex-shrink: 0; }
+  .log-from { color: var(--green); flex-shrink: 0; font-weight: 500; }
+  .log-arrow { color: var(--text-3); }
+  .log-to { color: var(--text-2); flex-shrink: 0; }
+  .log-msg { color: var(--text-1); }
+
+  /* ── Logic ── */
+  .logic-list { display: flex; flex-direction: column; gap: 5px; }
+
+  .logic-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 9px; border-radius: var(--radius-md);
+    border: 0.5px solid var(--border);
+    transition: border-color .15s;
+  }
+
+  .logic-item.on { border-color: var(--green-mid); background: rgba(29,158,117,0.08); }
+
+  .logic-expr { font-size: 10px; font-family: 'DM Mono', monospace; flex: 1; }
+  .logic-label { font-size: 10px; }
+
+  /* ── Prob bars ── */
+  .prob-list { display: flex; flex-direction: column; gap: 9px; }
+
+  .prob-item { display: flex; flex-direction: column; gap: 4px; }
+  .prob-header { display: flex; justify-content: space-between; align-items: center; }
+  .prob-name { font-size: 11px; color: var(--text-1); }
+  .prob-pct { font-size: 11px; font-weight: 500; }
+  .prob-track { height: 4px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+  .prob-fill { height: 100%; border-radius: 2px; transition: width 1.3s ease; }
+  .prob-note { font-size: 10px; color: var(--text-3); }
+
+  /* ── Parallelism ── */
+  .threads { display: flex; gap: 10px; }
+
+  .thread-col {
+    flex: 1; display: flex; flex-direction: column; gap: 4px;
+    padding: 10px; border-radius: var(--radius-md);
+    border: 0.5px solid var(--border);
+  }
+
+  .thread-header { font-size: 10px; font-weight: 500; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .thread-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+  .thread-event {
+    font-size: 10px; color: var(--text-2);
+    padding: 3px 0; border-bottom: 0.5px solid var(--border);
+    display: flex; gap: 6px;
+  }
+
+  .thread-ts { color: var(--text-3); flex-shrink: 0; }
+
+  .thread-bar-wrap { margin-top: 8px; }
+  .thread-bar-label { font-size: 9px; color: var(--text-3); margin-bottom: 3px; display: flex; justify-content: space-between; }
+  .thread-bar-track { height: 3px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+  .thread-bar-fill { height: 100%; border-radius: 2px; }
+
+  /* ── Knowledge table ── */
+  .know-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .know-table th { text-align: left; font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: .6px; padding: 6px 8px; border-bottom: 0.5px solid var(--border-md); font-weight: 400; }
+  .know-table td { padding: 6px 8px; border-bottom: 0.5px solid var(--border); color: var(--text-2); vertical-align: top; }
+  .know-table td:first-child { color: var(--text-1); font-weight: 500; }
+  .know-table tr:last-child td { border: none; }
+
+  /* ── Section nav ── */
+  .section-nav {
+    display: flex; gap: 4px; flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+
+  .snav {
+    font-size: 10px; padding: 5px 12px;
+    border-radius: 20px; cursor: pointer;
+    border: 0.5px solid var(--border);
+    color: var(--text-3);
+    font-family: 'DM Mono', monospace;
+    transition: all .15s;
+  }
+
+  .snav:hover { color: var(--text-2); border-color: var(--border-md); }
+  .snav.active { background: var(--green); color: #fff; border-color: var(--green); }
+
+  .section { display: none; }
+  .section.visible { display: contents; }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon"><i class="ti ti-leaf"></i></div>
+    <span class="logo-name">Sistema Inteligente de Invernadero</span>
+  </div>
+  <div class="header-right">
+    <span class="header-caption">T2 — Sistemas Inteligentes y ML</span>
+    <div class="pill"><div class="dot-pulse"></div>En línea</div>
+  </div>
+</div>
+
+<!-- ── BODY ── -->
+<div class="body">
+
+  <!-- Métricas -->
+  <div class="metrics" id="metrics-grid"></div>
+
+  <!-- Nav de secciones -->
+  <div class="section-nav" id="snav"></div>
+
+  <!-- SECCIÓN: Señales y Agentes -->
+  <div class="section visible" id="sec-senales">
+    <div class="row2">
+      <div class="card">
+        <div class="card-title">
+          <i class="ti ti-chart-line"></i> Señales temporales
+          <div class="tabs" id="signal-tabs">
+            <span class="tab active" data-key="temp">Temp.</span>
+            <span class="tab" data-key="hum">Humedad</span>
+            <span class="tab" data-key="luz">Luz</span>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="signalChart" role="img" aria-label="Señal temporal del invernadero">Datos de sensores del invernadero en el tiempo.</canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-robot"></i> Agentes activos</div>
+        <div class="agents" id="agents-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN: Sistema Experto y Riesgo -->
+  <div class="section visible" id="sec-experto">
+    <div class="row2b">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-bell"></i> Recomendaciones del sistema experto</div>
+        <div class="alerts" id="alerts-list"></div>
+
+        <div style="margin-top:14px;">
+          <div class="card-title" style="margin-bottom:10px;"><i class="ti ti-database"></i> Base de conocimiento (hechos activos)</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;" id="hechos-list"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-shield-check"></i> Nivel de riesgo</div>
+        <div class="risk-wrap">
+          <svg width="130" height="130" viewBox="0 0 130 130" role="img" aria-label="Indicador de riesgo global">
+            <circle cx="65" cy="65" r="52" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="10"/>
+            <circle cx="65" cy="65" r="52" fill="none" stroke="var(--amber)" stroke-width="10"
+              stroke-dasharray="326.7" stroke-dashoffset="98" stroke-linecap="round"
+              transform="rotate(-90 65 65)" id="risk-arc"/>
+            <text x="65" y="60" text-anchor="middle" font-family="Fraunces,serif"
+              font-size="24" font-weight="600" fill="#F0EEE8" id="risk-pct">70%</text>
+            <text x="65" y="76" text-anchor="middle" font-family="DM Mono,monospace"
+              font-size="10" fill="#9A9890" id="risk-label">MEDIO</text>
+          </svg>
+          <button class="exec-btn" id="exec-btn">
+            <i class="ti ti-player-play"></i> Ejecutar análisis
+          </button>
+          <div style="font-size:10px;color:var(--text-3);text-align:center;line-height:1.5;">
+            Basado en temperatura, humedad, luz y estado de hoja
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN: Lógica y Probabilidad -->
+  <div class="section visible" id="sec-logica">
+    <div class="row3">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-git-branch"></i> Lógica proposicional</div>
+        <div class="logic-list" id="logic-list"></div>
+        <div style="margin-top:12px;padding-top:12px;border-top:0.5px solid var(--border);">
+          <div style="font-size:10px;color:var(--text-3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.7px;">Proposiciones</div>
+          <div style="font-size:11px;color:var(--text-2);line-height:1.8;">
+            <span style="color:var(--text-1);">P</span> Humedad suelo &lt; 30% &nbsp;|&nbsp;
+            <span style="color:var(--text-1);">Q</span> Temperatura &gt; 32°C<br/>
+            <span style="color:var(--text-1);">R</span> Riego urgente &nbsp;|&nbsp;
+            <span style="color:var(--text-1);">S</span> Manchas en hoja<br/>
+            <span style="color:var(--text-1);">T</span> Posible enfermedad &nbsp;|&nbsp;
+            <span style="color:var(--text-1);">V</span> Cultivo normal
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-chart-bar"></i> Razonamiento probabilístico</div>
+        <div class="prob-list" id="prob-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN: Comunicación y Paralelismo -->
+  <div class="section visible" id="sec-agentes">
+    <div class="row3">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-messages"></i> Log de comunicación entre agentes</div>
+        <div class="log" id="comm-log"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-components"></i> Ejecución paralela (threading)</div>
+        <div class="threads" id="threads-view"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN: Representación del conocimiento -->
+  <div class="section visible" id="sec-conocimiento">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-table"></i> Representación del conocimiento — tabla de reglas</div>
+      <table class="know-table">
+        <thead>
+          <tr>
+            <th>Hecho / Condición</th>
+            <th>Regla aplicada</th>
+            <th>Conclusión inferida</th>
+            <th>Tipo</th>
+          </tr>
+        </thead>
+        <tbody id="know-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /body -->
+
+<script>
+/* ══════════════════════════════════════════════
+   DATOS — se reemplazan por valores reales desde
+   app.py usando st.components.v1.html(html_str)
+   ══════════════════════════════════════════════ */
+const DATA = {
+  temperatura:       34.2,
+  humedad_suelo:     28.5,
+  humedad_ambiental: 62.1,
+  intensidad_luz:    645,
+  estado_hoja:       "estres",
+  porcentaje_dano:   14.2,
+  riesgo_nivel:      "MEDIO",
+  riesgo_pct:        70,
+  hechos:            ["temperatura_alta","humedad_baja","luz_adecuada","manchas_en_hoja","borde_oscuro"],
+  recomendaciones: [
+    { icon:"ti-droplet",  text:"Regar ahora — humedad crítica (28.5%)", color:"#378ADD", bg:"rgba(55,138,221,0.1)" },
+    { icon:"ti-thermometer", text:"Alerta temperatura elevada (34.2°C)", color:"#E24B4A", bg:"rgba(226,75,74,0.1)" },
+    { icon:"ti-leaf", text:"Estrés moderado en hoja — revisar riego", color:"#EF9F27", bg:"rgba(239,159,39,0.1)" },
+  ],
+};
+
+/* ── Señales ── */
+const N = 90;
+function gen(base, amp, noise) {
+  return Array.from({length:N}, (_,i) =>
+    +(base + amp*Math.sin(i/N*4*Math.PI) + (Math.random()-.5)*noise).toFixed(1));
+}
+const signals = {
+  temp: { data: gen(26,8,2.5), color:"#E24B4A", label:"Temperatura (°C)" },
+  hum:  { data: gen(55,18,4),  color:"#378ADD", label:"Humedad suelo (%)" },
+  luz:  { data: gen(500,340,60), color:"#EF9F27", label:"Luz (lux)" },
+};
+const tsLabels = Array.from({length:N}, (_,i)=> i%15===0 ? `${String(6+Math.floor(i*15/60)).padStart(2,'0')}:${String((i*15)%60).padStart(2,'0')}` : '');
+
+let chart;
+function buildChart(key) {
+  const ctx = document.getElementById('signalChart').getContext('2d');
+  if (chart) chart.destroy();
+  const s = signals[key];
+  chart = new Chart(ctx, {
+    type:'line',
+    data: { labels: tsLabels, datasets: [{
+      data: s.data, borderColor: s.color, borderWidth: 1.5,
+      pointRadius: 0, tension: 0.35, fill: true,
+      backgroundColor: s.color+'20',
+    }]},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend:{display:false}, tooltip:{
+        callbacks:{ label: ctx => ctx.parsed.y.toFixed(1) }
+      }},
+      scales: {
+        x: { grid:{display:false}, ticks:{font:{family:'DM Mono',size:9}, color:'#5F5E5A', maxRotation:0} },
+        y: { grid:{color:'rgba(255,255,255,0.05)'}, ticks:{font:{family:'DM Mono',size:9}, color:'#5F5E5A'} }
+      }
+    }
+  });
+}
+
+document.querySelectorAll('#signal-tabs .tab').forEach(t => {
+  t.onclick = () => {
+    document.querySelectorAll('#signal-tabs .tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    buildChart(t.dataset.key);
+  };
+});
+
+buildChart('temp');
+
+/* ── Métricas ── */
+const metricsData = [
+  { label:'Temperatura',  val: DATA.temperatura.toFixed(1), unit:'°C', pct:Math.round(DATA.temperatura/50*100), color:'#E24B4A', icon:'ti-thermometer', alert: DATA.temperatura>32 },
+  { label:'Humedad suelo', val: DATA.humedad_suelo.toFixed(1), unit:'%', pct:Math.round(DATA.humedad_suelo), color:'#378ADD', icon:'ti-droplet', alert: DATA.humedad_suelo<30 },
+  { label:'Hum. ambiental', val: DATA.humedad_ambiental.toFixed(1), unit:'%', pct:Math.round(DATA.humedad_ambiental), color:'#5DCAA5', icon:'ti-cloud', alert:false },
+  { label:'Luz', val: Math.round(DATA.intensidad_luz).toString(), unit:'lux', pct:Math.round(DATA.intensidad_luz/1200*100), color:'#EF9F27', icon:'ti-sun', alert: DATA.intensidad_luz<200 },
+];
+const grid = document.getElementById('metrics-grid');
+metricsData.forEach((m,i) => {
+  const d = document.createElement('div');
+  d.className = 'metric' + (i===0?' active':'');
+  d.style.animationDelay = (i*.07)+'s';
+  d.innerHTML = `
+    <div class="metric-label">
+      <i class="ti ${m.icon}"></i>${m.label}
+      ${m.alert?'<div class="metric-alert-dot"></div>':''}
+    </div>
+    <div class="metric-val">${m.val}</div>
+    <div class="metric-unit">${m.unit}</div>
+    <div class="metric-bar"><div class="metric-fill" style="width:0%;background:${m.color}" data-pct="${Math.min(m.pct,100)}"></div></div>
+  `;
+  d.onclick = () => { document.querySelectorAll('.metric').forEach(x=>x.classList.remove('active')); d.classList.add('active'); };
+  grid.appendChild(d);
+});
+setTimeout(()=> document.querySelectorAll('.metric-fill').forEach(f => f.style.width = f.dataset.pct+'%'), 100);
+
+/* ── Agentes ── */
+const agentsData = [
+  { name:'AgenteSensor',       status:'120 registros generados', color:'#1D9E75', badge:'activo',  bb:'rgba(29,158,117,.2)', bc:'#5DCAA5' },
+  { name:'AgenteSeñales',      status:'2 anomalías detectadas',  color:'#378ADD', badge:'alerta',  bb:'rgba(55,138,221,.2)', bc:'#85B7EB' },
+  { name:'AgenteImagenes',     status:'hoja2.jpg procesada',     color:'#EF9F27', badge:'activo',  bb:'rgba(239,159,39,.2)', bc:'#FAC775' },
+  { name:'AgenteDecisor',      status:'3 reglas disparadas',     color:'#D4537E', badge:'activo',  bb:'rgba(212,83,126,.2)', bc:'#ED93B1' },
+  { name:'AgenteCoordinador',  status:'Orquestando',             color:'#7F77DD', badge:'hilo-1',  bb:'rgba(127,119,221,.2)','bc':'#AFA9EC' },
+];
+const al = document.getElementById('agents-list');
+agentsData.forEach(a => {
+  const d = document.createElement('div'); d.className='agent';
+  d.innerHTML = `<div class="agent-dot" style="background:${a.color}"></div>
+    <div class="agent-name">${a.name}</div>
+    <div class="agent-status">${a.status}</div>
+    <div class="badge" style="background:${a.bb};color:${a.bc}">${a.badge}</div>`;
+  al.appendChild(d);
+});
+
+/* ── Alertas ── */
+const alertsList = document.getElementById('alerts-list');
+DATA.recomendaciones.forEach(r => {
+  const d = document.createElement('div'); d.className='alert';
+  d.style.cssText = `background:${r.bg};border-left-color:${r.color};`;
+  d.innerHTML = `<i class="ti ${r.icon} alert-icon" style="color:${r.color}"></i>
+    <div><div class="alert-text">${r.text}</div><div class="alert-time">hace 2 min</div></div>`;
+  alertsList.appendChild(d);
+});
+
+/* ── Hechos ── */
+const hcol = { temperatura_alta:'#E24B4A', humedad_baja:'#378ADD', luz_adecuada:'#1D9E75', manchas_en_hoja:'#EF9F27', borde_oscuro:'#D4537E', hoja_amarilla:'#EF9F27', temperatura_normal:'#1D9E75', humedad_adecuada:'#1D9E75' };
+const hl = document.getElementById('hechos-list');
+DATA.hechos.forEach(h => {
+  const s = document.createElement('span');
+  const c = hcol[h]||'#888780';
+  s.style.cssText = `font-size:10px;padding:3px 9px;border-radius:12px;border:0.5px solid ${c}40;color:${c};background:${c}15;`;
+  s.textContent = h;
+  hl.appendChild(s);
+});
+
+/* ── Riesgo ── */
+const totalDash = 326.7;
+const arc = document.getElementById('risk-arc');
+const riskColors = { BAJO:'#1D9E75', MEDIO:'#EF9F27', ALTO:'#E24B4A', CRITICO:'#E24B4A' };
+arc.style.stroke = riskColors[DATA.riesgo_nivel]||'#EF9F27';
+const offset = totalDash - (DATA.riesgo_pct/100)*totalDash;
+arc.setAttribute('stroke-dashoffset', offset.toFixed(1));
+document.getElementById('risk-pct').textContent = DATA.riesgo_pct+'%';
+document.getElementById('risk-label').textContent = DATA.riesgo_nivel;
+
+/* ── Log ── */
+const logData = [
+  {time:'14:03:01', from:'Coordinador', to:'Sensor',      msg:'solicitar_lecturas'},
+  {time:'14:03:01', from:'Sensor',      to:'Coordinador', msg:'datos_enviados (120 reg.)'},
+  {time:'14:03:02', from:'Coordinador', to:'Señales',     msg:'analizar_serie_temp'},
+  {time:'14:03:02', from:'Señales',     to:'Coordinador', msg:'anomalias: 2 detectadas'},
+  {time:'14:03:03', from:'Coordinador', to:'Imagenes',    msg:'procesar hoja2.jpg'},
+  {time:'14:03:04', from:'Imagenes',    to:'Coordinador', msg:'estado: estres (14.2%)'},
+  {time:'14:03:04', from:'Coordinador', to:'Decisor',     msg:'ejecutar_sistema_experto'},
+  {time:'14:03:05', from:'Decisor',     to:'UI',          msg:'3 recomendaciones emitidas'},
+];
+const logEl = document.getElementById('comm-log');
+logData.forEach(l => {
+  const d = document.createElement('div'); d.className='log-line';
+  d.innerHTML = `<span class="log-time">${l.time}</span><span class="log-from">${l.from}</span><span class="log-arrow">→</span><span class="log-to">${l.to}</span><span class="log-msg">${l.msg}</span>`;
+  logEl.appendChild(d);
+});
+
+/* ── Lógica ── */
+const logicData = [
+  {expr:'(P ∧ Q) → R',       label:'Riego urgente',      active: DATA.temperatura>32 && DATA.humedad_suelo<30},
+  {expr:'Q → alerta_temp',   label:'Alerta temperatura', active: DATA.temperatura>32},
+  {expr:'S → T',             label:'Posible enfermedad', active: DATA.estado_hoja==='enfermedad'},
+  {expr:'(¬P∧¬Q∧¬S) → V',   label:'Cultivo normal',     active: false},
+  {expr:'(T ∧ P) → W',       label:'Revisión urgente',   active: DATA.estado_hoja==='enfermedad'&&DATA.humedad_suelo<30},
+];
+const logicEl = document.getElementById('logic-list');
+logicData.forEach(l => {
+  const d = document.createElement('div');
+  d.className = 'logic-item' + (l.active?' on':'');
+  d.innerHTML = `<code class="logic-expr" style="color:${l.active?'#5DCAA5':'var(--text-3)'}">${l.expr}</code>
+    <span class="logic-label" style="color:${l.active?'#1D9E75':'var(--text-3)'}">${l.label}</span>
+    ${l.active?'<i class="ti ti-check" style="color:#1D9E75;font-size:12px;"></i>':''}`;
+  logicEl.appendChild(d);
+});
+
+/* ── Probabilidad ── */
+const probData = [
+  {name:'Estrés hídrico severo',   pct:85, color:'#E24B4A', note:'Temp alta + humedad baja',       active: DATA.temperatura>32&&DATA.humedad_suelo<30},
+  {name:'Posible enfermedad',      pct:72, color:'#D4537E', note:'Manchas + humedad ambiental alta', active: DATA.estado_hoja!=='saludable'},
+  {name:'Estado estable',          pct:92, color:'#1D9E75', note:'Todo en rango normal',             active: false},
+  {name:'Estrés por poca luz',     pct:55, color:'#EF9F27', note:'Luz < 200 lux',                   active: DATA.intensidad_luz<200},
+  {name:'Riesgo combinado',        pct:68, color:'#7F77DD', note:'Humedad baja + estrés foliar',     active: DATA.humedad_suelo<30&&DATA.estado_hoja!=='saludable'},
+];
+const probEl = document.getElementById('prob-list');
+probData.forEach(p => {
+  const d = document.createElement('div'); d.className='prob-item';
+  d.innerHTML = `
+    <div class="prob-header">
+      <span class="prob-name" style="color:${p.active?'var(--text-1)':'var(--text-3)'}">${p.name}</span>
+      <span class="prob-pct" style="color:${p.color}">${p.pct}%</span>
+    </div>
+    <div class="prob-track"><div class="prob-fill" style="width:0%;background:${p.color}${p.active?'':'60'}" data-pct="${p.pct}"></div></div>
+    <div class="prob-note">${p.note}</div>`;
+  probEl.appendChild(d);
+});
+setTimeout(()=> document.querySelectorAll('.prob-fill').forEach(f=>f.style.width=f.dataset.pct+'%'), 150);
+
+/* ── Paralelismo ── */
+const threadsData = [
+  { name:'Hilo Señales', color:'#378ADD', events:[
+    {ts:'14:03:01', msg:'iniciado'},
+    {ts:'14:03:02', msg:'procesando temp...'},
+    {ts:'14:03:02', msg:'2 anomalías OK'},
+    {ts:'14:03:02', msg:'completado ✓'},
+  ], durPct: 40 },
+  { name:'Hilo Imágenes', color:'#EF9F27', events:[
+    {ts:'14:03:01', msg:'iniciado'},
+    {ts:'14:03:02', msg:'cargando hoja2.jpg'},
+    {ts:'14:03:03', msg:'OpenCV procesando'},
+    {ts:'14:03:04', msg:'completado ✓'},
+  ], durPct: 75 },
+  { name:'Hilo Decisor', color:'#D4537E', events:[
+    {ts:'14:03:01', msg:'iniciado'},
+    {ts:'14:03:03', msg:'esperando datos...'},
+    {ts:'14:03:05', msg:'pyDatalog OK'},
+    {ts:'14:03:05', msg:'completado ✓'},
+  ], durPct: 100 },
+];
+const tv = document.getElementById('threads-view');
+threadsData.forEach(t => {
+  const col = document.createElement('div'); col.className='thread-col';
+  col.innerHTML = `<div class="thread-header"><div class="thread-dot" style="background:${t.color}"></div>${t.name}</div>`
+    + t.events.map(e=>`<div class="thread-event"><span class="thread-ts">${e.ts}</span>${e.msg}</div>`).join('')
+    + `<div class="thread-bar-wrap">
+         <div class="thread-bar-label"><span>duración</span><span>${Math.round(t.durPct/100*2.1*10)/10}s</span></div>
+         <div class="thread-bar-track"><div class="thread-bar-fill" style="width:${t.durPct}%;background:${t.color}40;border-right:2px solid ${t.color}"></div></div>
+       </div>`;
+  tv.appendChild(col);
+});
+
+/* ── Conocimiento ── */
+const knowData = [
+  ['humedad_baja', 'Si humedad_baja → suelo_seco', 'suelo_seco', 'Hecho → Estado'],
+  ['suelo_seco ∧ temp_alta', 'Si seco ∧ alta → riego urgente', 'recomendar_riego_urgente', 'Regla compuesta'],
+  ['manchas ∧ hoja_amarilla', 'Si manchas ∧ color → enfermedad', 'condicion_enfermedad', 'Síntoma visual'],
+  ['condicion_enfermedad ∧ suelo_seco', 'Si enfermedad ∧ seco → urgente', 'revision_urgente', 'Regla crítica'],
+  ['temp_alta', 'Si temp_alta → alerta', 'alerta_temperatura', 'Monitoreo'],
+  ['humedad_adecuada ∧ temp_normal ∧ luz_adecuada', 'Si todo OK → planta_sana', 'cultivo_normal', 'Estado ideal'],
+];
+const kt = document.getElementById('know-tbody');
+knowData.forEach(r => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = r.map(c=>`<td>${c}</td>`).join('');
+  kt.appendChild(tr);
+});
+
+/* ── Exec btn ── */
+document.getElementById('exec-btn').onclick = () => {
+  const btn = document.getElementById('exec-btn');
+  btn.innerHTML = '<i class="ti ti-loader"></i> Analizando...';
+  btn.disabled = true;
+  setTimeout(()=>{ btn.innerHTML='<i class="ti ti-player-play"></i> Ejecutar análisis'; btn.disabled=false; }, 2000);
+};
+</script>
+</body>
+</html>
