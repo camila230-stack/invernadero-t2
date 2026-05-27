@@ -1,6 +1,6 @@
 # 📋 GUÍA PARA CADA INTEGRANTE — T2 Invernadero Inteligente
 
-## ✅ INTEGRANTE 1 — Tú (Streamlit + Coordinador)
+##  camila — (Streamlit + Coordinador)
 
 **Archivos a subir:**
 - `app.py`
@@ -29,7 +29,7 @@ git push -u origin main
 
 ---
 
-## ✅ INTEGRANTE 2 — Simulación + Señales + Paralelismo
+##  corina — Simulación + Señales + Paralelismo
 
 **Archivos a trabajar:**
 - `modules/agente_sensor.py`
@@ -60,7 +60,7 @@ git push origin feature/simulacion-datos
 
 ---
 
-## ✅ INTEGRANTE 3 — OpenCV (Procesamiento de imágenes)
+## kat — OpenCV (Procesamiento de imágenes)
 
 **Archivos a trabajar:**
 - `modules/agente_imagenes.py`
@@ -90,7 +90,7 @@ git push origin feature/procesamiento-imagenes
 
 ---
 
-## ✅ INTEGRANTE 4 — pyDatalog + Lógica + Probabilidad
+## jossiney — pyDatalog + Lógica + Probabilidad
 
 **Archivos a trabajar:**
 - `modules/agente_decisor.py`
@@ -121,7 +121,7 @@ git push origin feature/sistema-experto
 
 ---
 
-## 🔀 Proceso de merge (Integrante 1)
+## 🔀 Proceso de merge (camila)
 
 1. Cada integrante crea su Pull Request en GitHub
 2. Tú revisas que el código no rompa `app.py`

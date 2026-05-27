@@ -1,10 +1,3 @@
-# =============================================================
-# MÓDULO: agente_decisor.py
-# RESPONSABLE: Integrante 4
-# FUNCIÓN: Sistema experto basado en reglas (compatible con
-#          threading de Streamlit - sin pyDatalog).
-# =============================================================
-
 def ejecutar_sistema_experto(
     temperatura: float,
     humedad_suelo: float,
