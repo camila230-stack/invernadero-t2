@@ -1,14 +1,6 @@
-# =============================================================
-# MÓDULO: agente_coordinador.py
-# RESPONSABLE: Integrante 1
-# FUNCIÓN: Orquesta la comunicación entre todos los agentes.
-#          Recibe datos, los distribuye y consolida resultados.
-# =============================================================
-
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional
-
 
 @dataclass
 class MensajeAgente:
@@ -21,7 +13,6 @@ class MensajeAgente:
     tipo: str          # "datos" | "resultado" | "alerta" | "solicitud"
     contenido: dict
     timestamp: str = field(default_factory=lambda: datetime.now().strftime("%H:%M:%S"))
-
 
 class AgenteCoordinador:
     """

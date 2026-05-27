@@ -1,10 +1,3 @@
-# =============================================================
-# MÓDULO: agente_senales.py
-# RESPONSABLE: Integrante 2
-# FUNCIÓN: Analiza señales temporales, detecta tendencias,
-#          picos, caídas y anomalías en los datos del sensor.
-# =============================================================
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt

@@ -1,10 +1,3 @@
-# =============================================================
-# MÓDULO: agente_sensor.py
-# RESPONSABLE: Integrante 2
-# FUNCIÓN: Simula los datos del entorno del invernadero
-#          (temperatura, humedad ambiental, luz, humedad suelo)
-# =============================================================
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt

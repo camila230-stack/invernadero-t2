@@ -5,10 +5,10 @@
 
 | Integrante | Módulo | Archivos |
 |---|---|---|
-| **Integrante 1 (tú)** | Streamlit UI + Coordinador | `app.py`, `modules/agente_coordinador.py` |
-| **Integrante 2** | Simulación de datos + Señales + Paralelismo | `modules/agente_sensor.py`, `modules/agente_senales.py`, `modules/paralelismo.py` |
-| **Integrante 3** | OpenCV — Procesamiento de imágenes | `modules/agente_imagenes.py` |
-| **Integrante 4** | pyDatalog — Sistema experto + Lógica + Probabilidad | `modules/agente_decisor.py`, `modules/logica_proposicional.py`, `modules/razonamiento_probabilistico.py` |
+| **Camila** | Streamlit UI + Coordinador | `app.py`, `modules/agente_coordinador.py` |
+| **Corina** | Simulación de datos + Señales + Paralelismo | `modules/agente_sensor.py`, `modules/agente_senales.py`, `modules/paralelismo.py` |
+| **Katerin** | OpenCV — Procesamiento de imágenes | `modules/agente_imagenes.py` |
+| **Jossiney** | pyDatalog — Sistema experto + Lógica + Probabilidad | `modules/agente_decisor.py`, `modules/logica_proposicional.py`, `modules/razonamiento_probabilistico.py` |
 
 ---
 
@@ -16,23 +16,23 @@
 
 ```
 invernadero/
-├── app.py                          # [INT. 1] App principal Streamlit
+├── app.py                          #  App principal Streamlit
 ├── requirements.txt                # Dependencias
 ├── README.md
 ├── assets/
-│   └── images/                     # [INT. 3] Imágenes de hojas para procesar
+│   └── images/                     #  Imágenes de hojas para procesar
 │       ├── hoja1.jpg
 │       ├── hoja2.jpg
 │       └── hoja3.jpg
 └── modules/
-    ├── agente_sensor.py            # [INT. 2] Simulación de datos del entorno
-    ├── agente_senales.py           # [INT. 2] Análisis de señales temporales
-    ├── paralelismo.py              # [INT. 2] Threading/asyncio concurrente
-    ├── agente_imagenes.py          # [INT. 3] OpenCV — procesamiento de hojas
-    ├── agente_decisor.py           # [INT. 4] pyDatalog — sistema experto
-    ├── logica_proposicional.py     # [INT. 4] Lógica proposicional
-    ├── razonamiento_probabilistico.py # [INT. 4] Probabilidades de riesgo
-    └── agente_coordinador.py       # [INT. 1] Orquesta todos los agentes
+    ├── agente_sensor.py            # Simulación de datos del entorno
+    ├── agente_senales.py           # Análisis de señales temporales
+    ├── paralelismo.py              # Threading/asyncio concurrente
+    ├── agente_imagenes.py          # OpenCV — procesamiento de hojas
+    ├── agente_decisor.py           # pyDatalog — sistema experto
+    ├── logica_proposicional.py     # Lógica proposicional
+    ├── razonamiento_probabilistico.py # Probabilidades de riesgo
+    └── agente_coordinador.py       # Orquesta todos los agentes
 ```
 
 ---
@@ -69,10 +69,10 @@ git push origin feature/tu-modulo
 ```
 
 ### Ramas sugeridas
-- `feature/simulacion-datos` → Integrante 2
-- `feature/procesamiento-imagenes` → Integrante 3
-- `feature/sistema-experto` → Integrante 4
-- `main` → Integrante 1 (coordina merges)
+- `feature/simulacion-datos` → corina
+- `feature/procesamiento-imagenes` → katerin
+- `feature/sistema-experto` → jossiney
+- `main` → camila (coordina merges)
 
 ---
 
@@ -88,12 +88,12 @@ git push origin feature/tu-modulo
 
 ## 📊 Rúbrica de evaluación (20 pts)
 
-| Criterio | Pts | Módulo responsable |
+| Criterio | Pts | 
 |---|---|---|
-| Simulación de datos y análisis de señales | 3 | Integrante 2 |
+| Simulación de datos y análisis de señales | 3 | 
 | Procesamiento básico de imágenes | 3 | Integrante 3 |
-| Sistema experto y representación del conocimiento | 4 | Integrante 4 |
-| Diseño de agentes basados en conocimiento | 3 | Todos |
-| Lógica proposicional y razonamiento probabilístico | 2 | Integrante 4 |
-| Comunicación entre agentes y programación paralela | 3 | Integrantes 1 y 2 |
-| Optimización, claridad técnica y presentación | 2 | Integrante 1 |
+| Sistema experto y representación del conocimiento | 4 |
+| Diseño de agentes basados en conocimiento | 3 | 
+| Lógica proposicional y razonamiento probabilístico | 2 | 
+| Comunicación entre agentes y programación paralela | 3 |
+| Optimización, claridad técnica y presentación | 2 | 
